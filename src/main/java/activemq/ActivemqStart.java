@@ -1,6 +1,7 @@
 package activemq;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQTopic;
 
 import javax.jms.*;
 
@@ -8,6 +9,9 @@ public class ActivemqStart {
 
     String url = "";
     String route = "exampleTopic";
+
+    String virtualRoute = "VirtualTopic." + route;
+
     public int count = 0;
 
     public Connection conn = null;
@@ -26,7 +30,8 @@ public class ActivemqStart {
         conn.start();
 
         Session session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        destination = session.createTopic(route);
+//        destination = session.createTopic(route);
+        destination = new ActiveMQTopic(virtualRoute);
 
         MessageProducer mq = null;
         mq = session.createProducer(destination);

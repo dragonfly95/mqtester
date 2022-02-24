@@ -1,6 +1,7 @@
 package activemq;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQTopic;
 
 import javax.jms.*;
 
@@ -14,6 +15,8 @@ public class MQConsumer implements MessageListener, ExceptionListener {
     public MessageConsumer consumer = null;
 
     private String route = "exampleTopic";
+    String virtualRoute = "Consumer." + route +".VirtualTopic." + route;
+
     private long receiveTimeout;
 
     int count = 0;
@@ -33,7 +36,9 @@ public class MQConsumer implements MessageListener, ExceptionListener {
             conn.start();
 
             session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            destination = session.createTopic(route);
+//            destination = session.createTopic(route);
+            destination = new ActiveMQTopic(virtualRoute);
+
             consumer = session.createConsumer(destination);
 
             if (session == null) {
