@@ -4,7 +4,7 @@ import javax.jms.*;
 
 public class MQConsumer implements MessageListener, ExceptionListener {
 
-    private String url = "tcp://localhost:61616?wireFormat.maxInteractivityDuration=3000";
+    private String url = "";
 
     public Session session;
     public Connection conn = null;
@@ -16,6 +16,11 @@ public class MQConsumer implements MessageListener, ExceptionListener {
 
     int count = 0;
     int Num = 0;
+
+    public MQConsumer() {}
+    public MQConsumer(String url) {
+        this.url = url;
+    }
 
     public void run() {
 
@@ -50,7 +55,26 @@ public class MQConsumer implements MessageListener, ExceptionListener {
     @Override
     public void onMessage(Message message) {
         if (message == null) {
-
+            TextMessage textMessage = (TextMessage) message;
+            try {
+                System.out.println("textMessage = " + textMessage.getText());
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    protected void Consume(Connection conn, Session session, MessageConsumer consumer) throws JMSException {
+        Message message = consumer.receive(5000);
+        count++;
+        if (message != null) {
+            onMessage(message);
+        }
+    }
+
+    public void Close(Connection conn, Session session, MessageConsumer consumer) throws JMSException {
+        conn.close();
+        session.close();
+        consumer.close();
     }
 }

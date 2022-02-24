@@ -1,3 +1,4 @@
+import javax.jms.JMSException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -5,8 +6,10 @@ public class MainTest {
 
     public static void main(String[] args) {
 
-        ActivemqStart activemqStart = new ActivemqStart();
-        MQConsumer mqc = new MQConsumer();
+        String url = "tcp://localhost:61616";
+
+        ActivemqStart activemqStart = new ActivemqStart(url);
+        MQConsumer mqc = new MQConsumer(url);
 
         mqc.run();
 
@@ -15,10 +18,15 @@ public class MainTest {
 
             @Override
             public void run() {
-                activemqStart.run();
-                if (mqc.Num == 1) {
-                    mqc.Consume(mqc.conn, mqc.session, mqc.consumer);
+                try {
+                    activemqStart.run();
+                    if (mqc.Num == 1) {
+                        mqc.Consume(mqc.conn, mqc.session, mqc.consumer);
+                    }
+                } catch (JMSException e) {
+                    e.printStackTrace();
                 }
+
             }
         };
 
