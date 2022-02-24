@@ -1,3 +1,5 @@
+package client1;
+
 import activemq.ActivemqStart;
 import activemq.MQConsumer;
 
@@ -5,13 +7,11 @@ import javax.jms.JMSException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainTest {
-
+public class Runner1 {
     public static void main(String[] args) {
 
         String url = "tcp://localhost:61616";
 
-        ActivemqStart activemqStart = new ActivemqStart(url);
         MQConsumer mqc = new MQConsumer(url);
 
         mqc.run();
@@ -22,7 +22,6 @@ public class MainTest {
             @Override
             public void run() {
                 try {
-                    activemqStart.run("Data");
                     if (mqc.Num == 1) {
                         mqc.Consume(mqc.conn, mqc.session, mqc.consumer);
                     }
@@ -34,5 +33,6 @@ public class MainTest {
         };
 
         timer.scheduleAtFixedRate(timerTask, 1000, 5000);
+
     }
 }

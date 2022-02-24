@@ -1,3 +1,5 @@
+package activemq;
+
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
@@ -11,11 +13,11 @@ public class MQConsumer implements MessageListener, ExceptionListener {
     public Destination destination;
     public MessageConsumer consumer = null;
 
-    private String route = "";
+    private String route = "exampleTopic";
     private long receiveTimeout;
 
     int count = 0;
-    int Num = 0;
+    public int Num = 0;
 
     public MQConsumer() {}
     public MQConsumer(String url) {
@@ -54,7 +56,7 @@ public class MQConsumer implements MessageListener, ExceptionListener {
 
     @Override
     public void onMessage(Message message) {
-        if (message == null) {
+        if (message != null) {
             TextMessage textMessage = (TextMessage) message;
             try {
                 System.out.println("textMessage = " + textMessage.getText());
@@ -64,7 +66,7 @@ public class MQConsumer implements MessageListener, ExceptionListener {
         }
     }
 
-    protected void Consume(Connection conn, Session session, MessageConsumer consumer) throws JMSException {
+    public void Consume(Connection conn, Session session, MessageConsumer consumer) throws JMSException {
         Message message = consumer.receive(5000);
         count++;
         if (message != null) {

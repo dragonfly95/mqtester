@@ -1,3 +1,5 @@
+package activemq;
+
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
@@ -5,7 +7,7 @@ import javax.jms.*;
 public class ActivemqStart {
 
     String url = "";
-    String route = "";
+    String route = "exampleTopic";
     public int count = 0;
 
     public Connection conn = null;
@@ -17,7 +19,7 @@ public class ActivemqStart {
         this.url = url;
     }
 
-    public void run() throws JMSException {
+    public void run(String text) throws JMSException {
 
         ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(url);
         conn = cf.createConnection();
@@ -30,21 +32,13 @@ public class ActivemqStart {
         mq = session.createProducer(destination);
 
         mq.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-        Send(session, mq);
+
+        TextMessage message = session.createTextMessage(text);
+        mq.send(message);
+        System.out.println("SendData = " + message);
 
         count++;
         System.out.println("mq = " + count);
     }
-
-    private void Send(Session session, MessageProducer mq) throws JMSException {
-
-        for (int i = 0; i < 1; i++) {
-            String text = "Data";
-            TextMessage message = session.createTextMessage(text);
-            mq.send(message);
-            System.out.println("SendData = " + message);
-        }
-    }
-
 
 }
