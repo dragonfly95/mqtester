@@ -30,8 +30,8 @@ public class ActivemqStart {
         conn.start();
 
         Session session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
-//        destination = session.createTopic(route);
-        destination = new ActiveMQTopic(virtualRoute);
+        destination = session.createTopic(route);
+//        destination = new ActiveMQTopic(virtualRoute);
 
         MessageProducer mq = null;
         mq = session.createProducer(destination);

@@ -21,13 +21,13 @@ public class Runner1 {
 
             @Override
             public void run() {
-                try {
-                    if (mqc.Num == 1) {
-                        mqc.Consume(mqc.conn, mqc.session, mqc.consumer);
-                    }
-                } catch (JMSException e) {
-                    e.printStackTrace();
+            try {
+                if (mqc.Num == 1) {
+                    mqc.Consume(mqc.conn, mqc.session, mqc.consumer);
                 }
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
 
             }
         };
